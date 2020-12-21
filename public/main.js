@@ -89,10 +89,7 @@ app.on('ready', () => {
     win.webContents.send('message', 'React Is Ready')
     win.webContents.send('app_version', { version: app.getVersion() });
 
-    ipcMain.on('chooseUpload', () => {
-      console.log('Were Gonna Upload a file')
-      chooseFirmware()
-    })
+
 
     if (app.isPackaged) {
       win.webContents.send('message', 'App is packaged')
@@ -112,6 +109,12 @@ app.on('ready', () => {
     }
 
   })
+
+  ipcMain.on('chooseUpload', () => {
+    console.log('Were Gonna Upload a file')
+    chooseFirmware()
+  })
+
   createWindow()
 })
 ///////////////////////
@@ -152,6 +155,7 @@ const uploadFirmware = (port, path) => {
     console.log(stdout);
     console.log(`child process FINISHED`);
     firmwareUpload = false
+    win.webContents.send('uploadFinished')
   });
 }
 
@@ -170,6 +174,7 @@ const chooseFirmware = () => {
       if (firmwareUpload) {
         console.log('CANT UPLOAD FIRMWARE - UPLOAD ALREADY IN PROGRESS')
       } else {
+        win.webContents.send('uploading')
         console.log(result.filePaths[0])
         pathToFirmware = result.filePaths[0]
         firmwareUpload = true

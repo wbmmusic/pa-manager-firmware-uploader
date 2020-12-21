@@ -9,6 +9,8 @@ export default function TopBar() {
             console.log(theDevices)
             setDevices(theDevices)
         })
+
+        
         return () => {
             ipcRenderer.removeAllListeners('connectedDevices')
         }
