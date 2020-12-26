@@ -1,6 +1,6 @@
 {
   "name": "pa-manager-firmware-uploader",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -13,9 +13,11 @@
     "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
+    "react-select": "^3.1.1",
     "serialport": "^9.0.4",
     "usb-detection": "^4.10.0",
-    "web-vitals": "^0.2.4"
+    "wbm-usb-device": "^0.1.15",
+    "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -48,7 +50,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^11.1.0",
+    "electron": "^11.1.1",
     "electron-builder": "^22.9.1",
     "electron-rebuild": "^2.3.4"
   },
@@ -59,7 +61,7 @@
   "build": {
     "productName": "pa-manager-firmware-uploader",
     "appId": "com.wbm.pa-manager-firmware-uploader",
-    "electronVersion": "11.1.0",
+    "electronVersion": "11.1.1",
     "copyright": "WBM Tek",
     "extends": null,
     "files": [
@@ -67,10 +69,7 @@
       "electron/*"
     ],
     "win": {
-      "icon": "public/favicon.ico",
-      "extraFiles": [
-        "public/bossacwin.exe"
-      ]
+      "icon": "public/favicon.ico"
     }
   },
   "repository": {
