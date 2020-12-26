@@ -85,6 +85,10 @@ app.on('ready', () => {
     if (app.isPackaged) {
       win.webContents.send('message', 'App is packaged')
 
+      ipcMain.on('installUpdate', () => {
+        autoUpdater.quitAndInstall(true, true)
+      })
+
       autoUpdater.on('checking-for-update', () => win.webContents.send('checkingForUpdates'))
       autoUpdater.on('update-available', () => win.webContents.send('updateAvailable'))
       autoUpdater.on('update-not-available', () => win.webContents.send('noUpdate'))
