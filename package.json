@@ -1,6 +1,6 @@
 {
   "name": "pa-manager-firmware-uploader",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -14,8 +14,6 @@
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
     "react-select": "^3.1.1",
-    "serialport": "^9.0.4",
-    "usb-detection": "^4.10.0",
     "wbm-usb-device": "^0.1.15",
     "web-vitals": "^1.0.1"
   },
