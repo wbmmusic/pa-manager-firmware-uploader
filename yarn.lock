@@ -4940,7 +4940,7 @@ electron-updater@^4.3.5:
     lodash.isequal "^4.5.0"
     semver "^7.3.2"
 
-electron@^11.1.1:
+electron@^11.1.0:
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/electron/-/electron-11.1.1.tgz#188f036f8282798398dca9513e9bb3b10213e3aa"
   integrity sha512-tlbex3xosJgfileN6BAQRotevPRXB/wQIq48QeQ08tUJJrXwE72c8smsM/hbHx5eDgnbfJ2G3a60PmRjHU2NhA==
@@ -12715,10 +12715,10 @@ watchpack@^1.7.4:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
 
-wbm-usb-device@^0.1.15:
-  version "0.1.15"
-  resolved "https://registry.yarnpkg.com/wbm-usb-device/-/wbm-usb-device-0.1.15.tgz#240d1cf7f819df9ecdf7d0625edb43f167667722"
-  integrity sha512-lvc5GMHWKbVE/XpFzN/HK8+xqwkQXdumc83PPFGifXmsibpWzYZLVU0SGB20xXzrd/SazvRjnTvr9YgLGnJKtw==
+wbm-usb-device@^0.1.16:
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/wbm-usb-device/-/wbm-usb-device-0.1.16.tgz#452dd866b7b2a6b56e1477c7568d80beea7d6f96"
+  integrity sha512-LVpWdtWpX5vJbUNchbygyrKs9T9q3RrreYUVMBM1UiE0wIOmUjUp8tVxu6i1aTnrJRDp17sZTVchOj47/VRtNQ==
   dependencies:
     serialport "^9.0.4"
     usb-detection "^4.10.0"
