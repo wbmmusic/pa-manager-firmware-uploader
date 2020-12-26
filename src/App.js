@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import {  Modal, Spinner } from 'react-bootstrap';
+import { Modal, Spinner } from 'react-bootstrap';
 import TopBar from './components/TopBar';
+import Updates from './Updates';
 
 const { ipcRenderer } = window.require('electron')
 
@@ -47,6 +48,7 @@ function App() {
   return (
     <div>
       <TopBar />
+      <Updates />
       <Modal
         show={loadingModal.show}
         onHide={() => showLoadingModal(false)}
