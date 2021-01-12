@@ -31,15 +31,11 @@ export default function TopBar() {
         if (selectedDevice !== null) {
             ipcRenderer.send('chooseUpload', selectedDevice.value)
         }
-
     }
 
     const makeBelow = () => {
         return (
             <div>
-                <div>
-                    This is what goes below
-                </div>
                 <Button size="sm" variant="outline-primary" onClick={() => uploadFirmware()}>Upload</Button>
             </div>
         )

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Modal, Spinner } from 'react-bootstrap';
+import Terminal from './components/Terminal';
 import TopBar from './components/TopBar';
 import Updates from './Updates';
 
@@ -10,6 +11,7 @@ function App() {
   const [loadingModal, setLoadingModal] = useState({
     show: false
   })
+
 
   useEffect(() => {
     ipcRenderer.on('message', (e, theMessage) => {
@@ -28,7 +30,6 @@ function App() {
       showLoadingModal(false)
     })
 
-
     ipcRenderer.send('reactIsReady')
 
     return () => {
@@ -46,9 +47,10 @@ function App() {
   }
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh' }}>
       <TopBar />
       <Updates />
+      <Terminal />
       <Modal
         show={loadingModal.show}
         onHide={() => showLoadingModal(false)}

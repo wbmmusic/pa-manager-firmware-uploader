@@ -61,6 +61,11 @@ app.on('ready', () => {
         win.webContents.send('devList', data)
       })
 
+      wbmUsb.events.on('data', (path, data) => {
+        console.log('Data from ' + path + " ->", data.toString())
+        win.webContents.send('serialData', path, data)
+      })
+
       wbmUsb.events.on('fwUploadFinished', () => {
         console.log('FW Upload Finished')
         win.webContents.send('uploadFinished')
@@ -74,7 +79,6 @@ app.on('ready', () => {
       firstReactInit = false
 
       wbmUsb.startWbmUsb()
-
     }
 
 

@@ -1,20 +1,20 @@
 {
   "name": "pa-manager-firmware-uploader",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
+    "@testing-library/jest-dom": "^5.11.8",
+    "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.1.10",
     "bootstrap": "^4.5.3",
     "electron-updater": "^4.3.5",
     "foreman": "^3.0.1",
     "react": "^17.0.1",
-    "react-bootstrap": "^1.4.0",
+    "react-bootstrap": "^1.4.3",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
     "react-select": "^3.1.1",
-    "wbm-usb-device": "^0.1.16",
+    "wbm-usb-device": "^0.1.20",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -24,6 +24,7 @@
     "eject": "react-scripts eject",
     "dev": "nf start",
     "install": "electron-rebuild",
+    "rebuild": "electron-rebuild -f",
     "package": "electron-builder build -c.extraMetadata.main=build/main.js --publish never",
     "deploy": "electron-builder build -c.extraMetadata.main=build/main.js --publish always",
     "upload": "yarn build && git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin master && yarn deploy ",
@@ -49,7 +50,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^11.1.0",
+    "electron": "^11.1.1",
     "electron-builder": "^22.9.1",
     "electron-rebuild": "^2.3.4"
   },
@@ -60,7 +61,7 @@
   "build": {
     "productName": "pa-manager-firmware-uploader",
     "appId": "com.wbm.pa-manager-firmware-uploader",
-    "electronVersion": "11.1.0",
+    "electronVersion": "11.1.1",
     "copyright": "WBM Tek",
     "extends": null,
     "files": [
