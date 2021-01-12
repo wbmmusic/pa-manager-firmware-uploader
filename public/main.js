@@ -68,6 +68,11 @@ app.on('ready', () => {
         win.webContents.send('serialData', terminalContent)
       })
 
+      wbmUsb.events.on('progress', (data) => {
+        terminalContent.push(data)
+        win.webContents.send('serialData', terminalContent)
+      })
+
       wbmUsb.events.on('fwUploadFinished', () => {
         console.log('FW Upload Finished')
         win.webContents.send('uploadFinished')
@@ -141,9 +146,6 @@ app.on('ready', () => {
     }).catch(err => {
       console.log(err)
     })
-
-
-
   })
 
   createWindow()
