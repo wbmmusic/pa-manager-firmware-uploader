@@ -7,6 +7,7 @@ const url = require('url')
 const { autoUpdater } = require('electron-updater');
 
 let firstReactInit = true
+let terminalContent = []
 
 ////////////////// App Startup ///////////////////////////////////////////////////////////////////
 let win
@@ -63,7 +64,8 @@ app.on('ready', () => {
 
       wbmUsb.events.on('data', (path, data) => {
         console.log('Data from ' + path + " ->", data.toString())
-        win.webContents.send('serialData', path, data)
+        terminalContent.push(path + " -> " + data.toString())
+        win.webContents.send('serialData', terminalContent)
       })
 
       wbmUsb.events.on('fwUploadFinished', () => {
@@ -74,6 +76,11 @@ app.on('ready', () => {
       wbmUsb.events.on('fwUploading', () => {
         console.log('FW Uploading')
         win.webContents.send('uploading')
+      })
+
+      ipcMain.on('clearTerminal', () => {
+        terminalContent = []
+        win.webContents.send('serialData', terminalContent)
       })
 
       firstReactInit = false

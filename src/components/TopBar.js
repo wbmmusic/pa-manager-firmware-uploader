@@ -33,26 +33,19 @@ export default function TopBar() {
         }
     }
 
-    const makeBelow = () => {
-        return (
-            <div>
-                <Button size="sm" variant="outline-primary" onClick={() => uploadFirmware()}>Upload</Button>
-            </div>
-        )
-    }
-
     let options = []
     for (let i = 0; i < devices.length; i++) {
         options.push({ label: devices[i].UserName + " - " + devices[i].port, value: devices[i].port })
     }
 
     return (
-        <div style={{ padding: '10px' }}>
-            <div>
+        <div style={{ padding: '10px', display: 'flex', borderBottom:'1px solid lightGrey' }}>
+            <div style={{ width: '100%', marginRight: '10px' }}>
                 <Select styles={selectStyle} options={options} value={selectedDevice} onChange={(e) => setSelectedDevice(e)} />
             </div>
-            <hr />
-            {makeBelow()}
+            <div>
+                <Button size="sm" variant="outline-primary" onClick={() => uploadFirmware()}>Upload</Button>
+            </div>
         </div>
     )
 }

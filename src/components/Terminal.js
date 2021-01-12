@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Button } from 'react-bootstrap'
 
 const { ipcRenderer } = window.require('electron')
 
@@ -9,14 +10,17 @@ export default function Terminal() {
     useEffect(() => {
         console.log('TOP OF TERMINAL')
 
-        ipcRenderer.on('serialData', (e, path, theData) => {
+        ipcRenderer.on('serialData', (e, theData) => {
             console.log('Got DATA')
-            let tempTerminal = [...term]
-            tempTerminal.push(
-                <div key={"line" + tempTerminal.length} >
-                    {path + " > " + Buffer.from(theData).toString()}
-                </div>
-            )
+            let tempTerminal = []
+            theData.forEach(element => {
+                tempTerminal.push(
+                    <div key={"line" + tempTerminal.length} >
+                        {element}
+                    </div>
+                )
+            });
+
             setTerm(tempTerminal)
         })
         return () => {
@@ -25,8 +29,13 @@ export default function Terminal() {
     }, [])
 
     return (
-        <div style={{ width: '100%', height: '100%', padding: '10px', fontSize: '11px', display: 'flex', flexDirection: 'column' }} >
-            {term}
+        <div style={{ width: '100%', height: '100%', padding: '5px', fontSize: '11px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }} >
+            <div style={{ padding: '5px' }}>
+                <Button onClick={() => ipcRenderer.send('clearTerminal')} size="sm" variant="outline-primary" >Clear Terminal</Button>
+            </div>
+            <div style={{ width: '100%', height: '100%', display: 'flex', padding: '5px', flexDirection: 'column-reverse', overflowY: 'scroll', border: '1px solid lightGrey' }} >
+                {term}
+            </div>
         </div>
     )
 }
