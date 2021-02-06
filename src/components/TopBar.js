@@ -10,11 +10,10 @@ export default function TopBar() {
 
     useEffect(() => {
         ipcRenderer.on('devList', (e, tempDevices) => {
-            let theDevices = tempDevices
-            console.log(theDevices)
-            setDevices(theDevices)
-            if (theDevices.length === 0) {
+            if (tempDevices.length === 0) {
                 setSelectedDevice(null)
+            } else {
+                setDevices(tempDevices)
             }
         })
 
@@ -22,10 +21,6 @@ export default function TopBar() {
             ipcRenderer.removeAllListeners('connectedDevices')
         }
     }, [])
-
-    useEffect(() => {
-        console.log(devices)
-    }, [devices])
 
     const uploadFirmware = () => {
         if (selectedDevice !== null) {
@@ -39,7 +34,7 @@ export default function TopBar() {
     }
 
     return (
-        <div style={{ padding: '10px', display: 'flex', borderBottom:'1px solid lightGrey' }}>
+        <div style={{ padding: '10px', display: 'flex', borderBottom: '1px solid lightGrey' }}>
             <div style={{ width: '100%', marginRight: '10px' }}>
                 <Select styles={selectStyle} options={options} value={selectedDevice} onChange={(e) => setSelectedDevice(e)} />
             </div>

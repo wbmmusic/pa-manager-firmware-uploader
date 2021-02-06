@@ -12,7 +12,6 @@ function App() {
     show: false
   })
 
-
   useEffect(() => {
     ipcRenderer.on('message', (e, theMessage) => {
       console.log(theMessage)
