@@ -48,6 +48,10 @@ const createWindow = () => {
   win.on('closed', () => {
     win = null
   })
+
+  win.on('close', () => {
+    wbmUsb.events.removeAllListeners()
+  })
 }
 
 // Create myWindow, load the rest of the app, etc...
