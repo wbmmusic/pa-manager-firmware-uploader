@@ -2,7 +2,6 @@ const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const wbmUsb = require('wbm-usb-device')
 const path = require('path')
 const url = require('url')
-//require('update-electron-app')()
 
 const { autoUpdater } = require('electron-updater');
 
@@ -32,6 +31,7 @@ const createWindow = () => {
     height: 700,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false
     },
     icon: path.join(__dirname, '/favicon.ico')
   })
@@ -50,7 +50,7 @@ const createWindow = () => {
   })
 
   win.on('close', () => {
-    wbmUsb.events.removeAllListeners()
+    wbmUsb.removeAllListeners()
   })
 }
 
@@ -60,33 +60,33 @@ app.on('ready', () => {
   ipcMain.on('reactIsReady', () => {
     if (firstReactInit === true) {
 
-      wbmUsb.events.on('devList', (data) => {
+      wbmUsb.on('devList', (data) => {
         console.log('DEV LIST YO', data)
         win.webContents.send('devList', data)
       })
 
-      wbmUsb.events.on('data', (path, data) => {
+      wbmUsb.on('data', (path, data) => {
         console.log('Data from ' + path + " ->", data.toString())
         win.webContents.send('serialData', path + " -> " + data.toString())
       })
 
-      wbmUsb.events.on('progress', (data) => {
+      wbmUsb.on('progress', (data) => {
         win.webContents.send('serialData', data)
       })
 
-      wbmUsb.events.on('fwUploadFinished', () => {
+      wbmUsb.on('fwUploadFinished', () => {
         console.log('FW Upload Finished')
         win.webContents.send('uploadFinished')
       })
 
-      wbmUsb.events.on('fwUploading', () => {
+      wbmUsb.on('fwUploading', () => {
         console.log('FW Uploading')
         win.webContents.send('uploading')
       })
 
-      firstReactInit = false
+      wbmUsb.startMonitoring()
 
-      wbmUsb.startWbmUsb()
+      firstReactInit = false
     }
 
 
@@ -137,7 +137,11 @@ app.on('ready', () => {
       } else {
         console.log(result.filePaths[0])
         pathToFirmware = result.filePaths[0]
-        wbmUsb.fwUpload(path, pathToFirmware)
+        console.log('THIS STUFF ____', path, pathToFirmware)
+        wbmUsb.uploadFirmware({
+          comPort: path,
+          firm: pathToFirmware
+        })
       }
     }).catch(err => {
       console.log(err)
