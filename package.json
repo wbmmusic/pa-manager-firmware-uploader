@@ -1,6 +1,6 @@
 {
   "name": "io-manager-firmware-uploader",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
@@ -14,7 +14,7 @@
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
     "react-select": "^5.1.0",
-    "wbm-usb-device": "^0.2.32",
+    "wbm-usb-device": "^0.2.34",
     "web-vitals": "^2.1.1"
   },
   "scripts": {
@@ -30,6 +30,7 @@
     "backup": "git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin master",
     "upload": "yarn build && git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin master && yarn deploy ",
     "electron": "electron .",
+    "refresh": "yarn upgrade --latest && yarn rebuild",
     "try": "yarn build && yarn package "
   },
   "eslintConfig": {
