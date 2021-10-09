@@ -1,5 +1,5 @@
 {
-  "name": "pa-manager-firmware-uploader",
+  "name": "io-manager-firmware-uploader",
   "version": "0.0.32",
   "private": true,
   "dependencies": {
