@@ -27,8 +27,8 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
 const createWindow = () => {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 900,
-    height: 700,
+    width: 500,
+    height: 400,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -71,7 +71,7 @@ app.on('ready', () => {
       })
 
       wbmUsb.on('progress', (data) => {
-        win.webContents.send('serialData', data)
+        win.webContents.send('progress', data)
       })
 
       wbmUsb.on('fwUploadFinished', () => {
@@ -138,10 +138,7 @@ app.on('ready', () => {
         console.log(result.filePaths[0])
         pathToFirmware = result.filePaths[0]
         console.log('THIS STUFF ____', path, pathToFirmware)
-        wbmUsb.uploadFirmware({
-          comPort: path,
-          firm: pathToFirmware
-        })
+        wbmUsb.uploadFirmware(path, pathToFirmware)
       }
     }).catch(err => {
       console.log(err)

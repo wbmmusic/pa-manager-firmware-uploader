@@ -1,34 +1,55 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 
 const { ipcRenderer } = window.require('electron')
 
 export default function Terminal() {
 
-    const [term, setTerm] = useState([])
+    const [progress, setProgress] = useState({
+        erasing: false,
+        writeProgress: 0,
+        reading: false,
+        verifyProgress: 0,
+        complete: false
+    })
 
     useEffect(() => {
-        console.log('TOP OF TERMINAL')
-
-        ipcRenderer.on('serialData', (e, theData) => {
-            setTerm(old => [(
-                <div>
-                    {theData}
-                </div>
-            ), ...old])
+        ipcRenderer.on('progress', (e, theData) => {
+            setProgress(theData)
         })
+
         return () => {
-            ipcRenderer.removeAllListeners('serialData');
+            ipcRenderer.removeAllListeners('progress');
         }
     }, [])
 
     return (
-        <div style={{ width: '100%', height: '100%', padding: '5px', fontSize: '11px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }} >
-            <div style={{ padding: '5px' }}>
-                <Button onClick={() => setTerm([])} size="sm" variant="outline-primary" >Clear Terminal</Button>
-            </div>
-            <div style={{ width: '100%', height: '100%', display: 'flex', padding: '5px', flexDirection: 'column-reverse', overflowY: 'scroll', border: '1px solid lightGrey' }} >
-                {term}
+        <div style={{ padding: '10px' }}>
+            <div style={{ display: 'inline-block' }}>
+                <Table>
+                    <tbody>
+                        <tr>
+                            <td>Erase</td>
+                            <td><input type="checkbox" checked={progress.erasing} /></td>
+                        </tr>
+                        <tr>
+                            <td>Write</td>
+                            <td><progress value={progress.writeProgress} /></td>
+                        </tr>
+                        <tr>
+                            <td>Read</td>
+                            <td><input type="checkbox" checked={progress.reading} /></td>
+                        </tr>
+                        <tr>
+                            <td>Verify</td>
+                            <td><progress value={progress.verifyProgress} /></td>
+                        </tr>
+                        <tr>
+                            <td>Complete</td>
+                            <td><input type="checkbox" checked={progress.complete} /></td>
+                        </tr>
+                    </tbody>
+                </Table>
             </div>
         </div>
     )
