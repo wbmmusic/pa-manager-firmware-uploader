@@ -12,7 +12,7 @@ function App() {
     })
 
     ipcRenderer.on('app_version', (event, arg) => {
-      document.title = 'io manager firmware uploader --- v' + arg.version;
+      document.title = 'io-manager firmware uploader --- v' + arg.version;
     });
 
     ipcRenderer.send('reactIsReady')
