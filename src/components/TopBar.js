@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Button, ProgressBar, Table } from 'react-bootstrap'
 import Select from 'react-select'
 import { selectStyle } from '../styles'
-const { ipcRenderer } = window.require('electron')
 
 export default function TopBar() {
     const defaultProgress = {
@@ -18,7 +17,8 @@ export default function TopBar() {
     const [uploading, setUploading] = useState(false)
 
     useEffect(() => {
-        ipcRenderer.on('devList', (e, tempDevices) => {
+
+        window.api.receive('devList', (e, tempDevices) => {
             if (tempDevices.length === 0) {
                 setSelectedDevice(null)
             } else {
@@ -26,29 +26,29 @@ export default function TopBar() {
             }
         })
 
-        ipcRenderer.on('progress', (e, theData) => {
+        window.api.receive('progress', (e, theData) => {
             setProgress(theData)
         })
 
-        ipcRenderer.on('uploading', (e) => {
+        window.api.receive('uploading', (e) => {
             setUploading(true)
         })
 
-        ipcRenderer.on('uploadFinished', (e) => {
+        window.api.receive('uploadFinished', (e) => {
             setUploading(false)
         })
 
         return () => {
-            ipcRenderer.removeAllListeners('connectedDevices')
-            ipcRenderer.removeAllListeners('progress');
-            ipcRenderer.removeAllListeners('uploading');
-            ipcRenderer.removeAllListeners('uploadFinished');
+            window.api.removeAllListeners('connectedDevices')
+            window.api.removeAllListeners('progress');
+            window.api.removeAllListeners('uploading');
+            window.api.removeAllListeners('uploadFinished');
         }
     }, [])
 
     const uploadFirmware = () => {
         if (selectedDevice !== null) {
-            ipcRenderer.send('chooseUpload', selectedDevice.value)
+            window.api.send('chooseUpload', selectedDevice.value)
         }
     }
 
@@ -76,11 +76,11 @@ export default function TopBar() {
                         <tbody>
                             <tr>
                                 <td>Uploading</td>
-                                <td><input type="checkbox" checked={uploading} /></td>
+                                <td><input type="checkbox" readOnly checked={uploading} /></td>
                             </tr>
                             <tr>
                                 <td>Erase</td>
-                                <td><input type="checkbox" checked={progress.erasing} /></td>
+                                <td><input type="checkbox" readOnly checked={progress.erasing} /></td>
                             </tr>
                             <tr>
                                 <td>Write</td>
@@ -88,7 +88,7 @@ export default function TopBar() {
                             </tr>
                             <tr>
                                 <td>Read</td>
-                                <td><input type="checkbox" checked={progress.reading} /></td>
+                                <td><input type="checkbox" readOnly checked={progress.reading} /></td>
                             </tr>
                             <tr>
                                 <td>Verify</td>
@@ -96,7 +96,7 @@ export default function TopBar() {
                             </tr>
                             <tr>
                                 <td>Complete</td>
-                                <td><input type="checkbox" checked={progress.complete} /></td>
+                                <td><input type="checkbox" readOnly checked={progress.complete} /></td>
                             </tr>
                         </tbody>
                     </Table>

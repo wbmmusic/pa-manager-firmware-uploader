@@ -1,25 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import TopBar from './components/TopBar';
 import Updates from './Updates';
-
-const { ipcRenderer } = window.require('electron')
 
 function App() {
 
   useEffect(() => {
-    ipcRenderer.on('message', (e, theMessage) => {
+    window.api.receive('message', (e, theMessage) => {
       console.log(theMessage)
     })
 
-    ipcRenderer.on('app_version', (event, arg) => {
+    window.api.receive('app_version', (event, arg) => {
       document.title = 'io-manager firmware uploader --- v' + arg.version;
     });
 
-    ipcRenderer.send('reactIsReady')
+    window.api.send('reactIsReady')
 
     return () => {
-      ipcRenderer.removeAllListeners('message');
-      ipcRenderer.removeAllListeners('app_version');
+      window.api.removeAllListeners('message');
+      window.api.removeAllListeners('app_version');
     }
   }, [])
 

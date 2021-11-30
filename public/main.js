@@ -1,6 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const wbmUsb = require('wbm-usb-device')
-const path = require('path')
+const { join } = require('path')
 const url = require('url')
 
 const { autoUpdater } = require('electron-updater');
@@ -30,14 +30,14 @@ const createWindow = () => {
     width: 500,
     height: 400,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      preload: join(__dirname, 'preload.js')
     },
-    icon: path.join(__dirname, '/favicon.ico')
+    autoHideMenuBar: true,
+    icon: join(__dirname, '/favicon.ico')
   })
 
   const startUrl = process.env.ELECTRON_START_URL || url.format({
-    pathname: path.join(__dirname, '/../build/index.html'),
+    pathname: join(__dirname, '/../build/index.html'),
     protocol: 'file:',
     slashes: true
   });
