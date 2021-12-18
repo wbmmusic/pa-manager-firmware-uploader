@@ -54,7 +54,7 @@ export default function TopBar() {
 
     let options = []
     for (let i = 0; i < devices.length; i++) {
-        options.push({ label: "(" + devices[i].Model + ") " + " | " + devices[i].UserName + " | " + devices[i].path, value: devices[i].path })
+        options.push({ label: "(" + devices[i].Model + ") | " + devices[i].UserName + " | " + devices[i].path, value: devices[i].path })
     }
 
     return (
