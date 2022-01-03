@@ -29,6 +29,7 @@ const createWindow = () => {
   win = new BrowserWindow({
     width: 500,
     height: 400,
+    show: false,
     webPreferences: {
       preload: join(__dirname, 'preload.js')
     },
@@ -45,13 +46,9 @@ const createWindow = () => {
   //win.maximize()
 
   // Emitted when the window is closed.
-  win.on('closed', () => {
-    win = null
-  })
-
-  win.on('close', () => {
-    wbmUsb.removeAllListeners()
-  })
+  win.on('closed', () => win = null)
+  win.on('close', () => wbmUsb.removeAllListeners())
+  win.on('ready-to-show', () => win.show())
 }
 
 // Create myWindow, load the rest of the app, etc...

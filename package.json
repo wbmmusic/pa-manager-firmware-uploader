@@ -1,6 +1,6 @@
 {
   "name": "io-manager-firmware-uploader",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
@@ -10,7 +10,7 @@
     "electron-updater": "^4.6.1",
     "foreman": "^3.0.1",
     "react": "^17.0.2",
-    "react-bootstrap": "^2.0.4",
+    "react-bootstrap": "^2.1.0",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
     "react-select": "^5.2.1",
@@ -52,7 +52,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^16.0.5",
+    "electron": "^16.0.6",
     "electron-builder": "^22.14.5",
     "electron-rebuild": "^3.2.5"
   },
