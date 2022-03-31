@@ -9,11 +9,10 @@ let firstReactInit = true
 
 ////////////////// App Startup ///////////////////////////////////////////////////////////////////
 let win
-    ////////  SINGLE INSTANCE //////////
+
+////////  SINGLE INSTANCE //////////
 const gotTheLock = app.requestSingleInstanceLock()
-if (!gotTheLock) {
-    app.quit()
-}
+if (!gotTheLock) app.quit()
 
 app.on('second-instance', (event, commandLine, workingDirectory) => {
         // Someone tried to run a second instance, we should focus our window.
