@@ -2,8 +2,11 @@ const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const wbmUsb = require('wbm-usb-device')
 const { join } = require('path')
 const url = require('url')
-
+const { existsSync, mkdirSync, unlinkSync, readdirSync } = require('fs')
 const { autoUpdater } = require('electron-updater');
+
+const { setBase, downloadFirmware, getLines, getLine } = require('wbm-version-manager')
+setBase('http://versions.wbmtek.com/api')
 
 let firstReactInit = true
 
@@ -13,6 +16,107 @@ let win
 ////////  SINGLE INSTANCE //////////
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) app.quit()
+
+
+/////////////////////////////////////////
+const pathToFiles = join(app.getPath('userData'), 'data')
+const pathToDevices = join(pathToFiles, 'devices')
+const checkFolderStructure = () => {
+    if (!existsSync(pathToFiles)) {
+        mkdirSync(pathToFiles)
+        console.log("Created Data Folder")
+    } else console.log("Found Data Folder")
+
+    if (!existsSync(pathToDevices)) {
+        mkdirSync(pathToDevices)
+        console.log("Created Devices Folder")
+    } else console.log("Found Devices Folder")
+}
+
+const handleLine = async(line) => {
+    console.log("Line Name:", line.name)
+    console.log("Last Mod:", new Date(line.modified).toLocaleDateString())
+    console.log("# of devices:", line.devices.length)
+
+    //console.log(JSON.stringify(line, null, " "))
+
+    await line.devices.reduce(async(acc, element) => {
+        await acc
+
+        //console.log("EL", element)
+
+        if (element.name !== "Brain") {
+
+            const pathToDevice = join(pathToDevices, element.path)
+
+            if (!existsSync(pathToDevice)) mkdirSync(pathToDevice)
+            let currentFirmware = null
+
+            if (element.current !== '???') {
+                currentFirmware = element.firmware.find(fw => fw.version === element.current)
+                if (!currentFirmware) throw new Error('ERROR HERE')
+
+                // If a firmware with this name is not already in this devices folder
+                if (!existsSync(join(pathToDevice, currentFirmware.name))) {
+                    console.log("Current firmware file doesn't exist")
+
+                    // get name of all files in this devices folder
+                    const devFolderContents = readdirSync(pathToDevice)
+
+                    // Delete each File In this folder
+                    devFolderContents.forEach(file => {
+                        unlinkSync(join(pathToDevice, file))
+                    })
+
+                    try {
+                        // Put New / Current Firmware in folder
+                        await downloadFirmware(currentFirmware.id, join(pathToDevice, currentFirmware.name))
+                        console.log("Updated Firmware", currentFirmware)
+                        addNotification({ type: "fw updated", message: element.name + " FW updated to " + currentFirmware.version })
+                        win.webContents.send('updatedFirmware', currentFirmware)
+                        win.webContents.send('refreshFW', currentFirmware)
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                }
+            }
+            //console.log("Device", element.name)
+            //console.log("Current FW:", element.current)
+            //console.log("Last Mod:", new Date(element.modified).toLocaleDateString())
+        }
+    }, Promise.resolve([]))
+
+    //space()
+}
+
+const checkForFwUpdates = async() => {
+    try {
+        let lines = await getLines()
+        if (lines === undefined) console.log("LINES IS UNDEFINED")
+        let lineID = lines.find(line => line.path === 'iomanager').id
+        if (lineID === undefined) console.log("THE LINEID IS UNDEFINED")
+        let theLine = await getLine(lineID)
+        handleLine(theLine)
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+const getCurVerInFolder = (board) => {
+    const deviceFiles = readdirSync(join(pathToDevices, board))
+    const binFile = deviceFiles.filter(file => file.includes('.bin'))
+    if (binFile.length === 0) return "no fw"
+    else {
+        let fileName = binFile[0].replace('.bin', '')
+        fileName = fileName.replace(/^(.*)FW/, '')
+        return fileName
+    }
+}
+
+checkFolderStructure()
+    /////////////////////////////////////////////
 
 app.on('second-instance', (event, commandLine, workingDirectory) => {
         // Someone tried to run a second instance, we should focus our window.
@@ -26,8 +130,8 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
 const createWindow = () => {
     // Create the browser window.
     win = new BrowserWindow({
-        width: 500,
-        height: 400,
+        width: 600,
+        height: 590,
         show: false,
         autoHideMenuBar: true,
         webPreferences: {
@@ -51,6 +155,14 @@ const createWindow = () => {
     win.on('ready-to-show', () => win.show())
 }
 
+const processDevList = data => {
+    let devs = [...data]
+    for (let i = 0; i < devs.length; i++) {
+        devs[i].curfw = getCurVerInFolder(devs[i].Model.toLowerCase().replaceAll(' ', ''))
+    }
+    return devs
+}
+
 // Create myWindow, load the rest of the app, etc...
 app.on('ready', () => {
         //log("-APP IS READY");
@@ -59,7 +171,8 @@ app.on('ready', () => {
 
                 wbmUsb.on('devList', (data) => {
                     console.log('DEV LIST YO', data)
-                    win.webContents.send('devList', data)
+
+                    win.webContents.send('devList', processDevList(data))
                 })
 
                 wbmUsb.on('data', (path, data) => {
@@ -84,6 +197,11 @@ app.on('ready', () => {
                 wbmUsb.startMonitoring()
 
                 firstReactInit = false
+
+                checkForFwUpdates()
+                setInterval(() => {
+                    checkForFwUpdates()
+                }, 10 * 60 * 1000);
             }
 
 
@@ -140,6 +258,23 @@ app.on('ready', () => {
             }).catch(err => {
                 console.log(err)
             })
+        })
+
+        ipcMain.on('uploadCurrent', (e, dev) => {
+            console.log(dev)
+            const pathToDeviceFolder = join(pathToDevices, dev.Model.toLowerCase().replaceAll(" ", ""))
+            const deviceFiles = readdirSync(pathToDeviceFolder)
+            const binFile = deviceFiles.filter(file => file.includes('.bin'))
+            if (binFile.length === 0) console.log("no fw")
+            else {
+                wbmUsb.uploadFirmware(dev.path, join(pathToDeviceFolder, binFile[0]))
+            }
+
+        })
+
+        ipcMain.on('getDevices', () => {
+            console.log('GET DEVICES')
+            win.webContents.send('devList', processDevList(wbmUsb.wbmDevices))
         })
 
         createWindow()

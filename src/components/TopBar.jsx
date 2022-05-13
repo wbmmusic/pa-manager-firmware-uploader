@@ -1,7 +1,29 @@
+import {
+  Timeline,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDot,
+  TimelineItem,
+  TimelineSeparator,
+} from "@mui/lab";
+import {
+  Button,
+  Divider,
+  Typography,
+  Menu,
+  MenuItem,
+  Stack,
+  Tooltip,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Button, ProgressBar, Table } from "react-bootstrap";
-import Select from "react-select";
-import { selectStyle } from "../styles";
+import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
+import UploadIcon from "@mui/icons-material/Upload";
+import DownloadIcon from "@mui/icons-material/Download";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CompareIcon from "@mui/icons-material/Compare";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Box } from "@mui/system";
 
 export default function TopBar() {
   const defaultProgress = {
@@ -15,11 +37,13 @@ export default function TopBar() {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [progress, setProgress] = useState(defaultProgress);
   const [uploading, setUploading] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const open = Boolean(menuAnchor);
 
   useEffect(() => {
     window.api.receive("devList", (e, tempDevices) => {
       if (tempDevices.length === 0) {
-        setSelectedDevice(null);
+        setDevices([]);
       } else {
         setDevices(tempDevices);
       }
@@ -34,8 +58,10 @@ export default function TopBar() {
     });
 
     window.api.receive("uploadFinished", e => {
-      setUploading(false);
+      setSelectedDevice(null);
     });
+
+    window.api.send("getDevices");
 
     return () => {
       window.api.removeAllListeners("connectedDevices");
@@ -46,9 +72,14 @@ export default function TopBar() {
   }, []);
 
   const uploadFirmware = () => {
-    if (selectedDevice !== null) {
-      window.api.send("chooseUpload", selectedDevice.value);
-    }
+    window.api.send("chooseUpload", selectedDevice.value);
+  };
+
+  const uploadCurrentFirmware = () => {
+    window.api.send(
+      "uploadCurrent",
+      devices.find(dev => dev.path === selectedDevice.value)
+    );
   };
 
   let options = [];
@@ -65,87 +96,226 @@ export default function TopBar() {
     });
   }
 
+  const handleDevicesClick = e => setMenuAnchor(e.currentTarget);
+
+  const handleDevicesClose = () => setMenuAnchor(null);
+
   return (
-    <div>
-      <div
-        style={{
-          padding: "10px",
-          display: "flex",
-          borderBottom: "1px solid lightGrey",
-          borderTop: "1px solid lightGrey",
+    <>
+      <Box p={1} sx={{ borderTop: "1px solid lightGrey" }}>
+        <Stack direction="row" spacing={1}>
+          <Box width="100%">
+            <Button
+              size="small"
+              variant="contained"
+              disabled={devices.length === 0}
+              endIcon={<ExpandMoreIcon />}
+              onClick={handleDevicesClick}
+            >
+              Devices
+            </Button>
+            <Menu
+              anchorEl={menuAnchor}
+              open={open}
+              onClose={handleDevicesClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            >
+              {devices.map(dev => (
+                <Tooltip
+                  key={dev.serialNumber}
+                  title={`Installed: ${dev.firmware} | Current: ${dev.curfw}`}
+                  placement="bottom"
+                >
+                  <MenuItem
+                    onClick={() => {
+                      setSelectedDevice({
+                        label: `${dev.Model} | ${dev.UserName} | ${dev.path}`,
+                        value: dev.path,
+                      });
+                      setProgress(defaultProgress);
+                      setUploading(false);
+                      handleDevicesClose();
+                    }}
+                  >
+                    {`${dev.Model} | ${dev.UserName} | ${dev.path}`}
+                  </MenuItem>
+                </Tooltip>
+              ))}
+            </Menu>
+          </Box>
+
+          <Button
+            size="small"
+            variant="contained"
+            color="warning"
+            disabled={!selectedDevice}
+            onClick={() => uploadFirmware()}
+            sx={{ whiteSpace: "nowrap", minWidth: "auto" }}
+          >
+            Upload Other FW
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="success"
+            disabled={!selectedDevice}
+            onClick={() => uploadCurrentFirmware()}
+            sx={{ whiteSpace: "nowrap", minWidth: "auto" }}
+          >
+            Upload Current FW
+          </Button>
+        </Stack>
+      </Box>
+      <Divider />
+      <Box p={1}>
+        <Typography variant="body2">
+          {selectedDevice !== null
+            ? selectedDevice.label
+            : "No device Selected"}
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          position: "relative",
+          background: progress.complete ? "lightGreen" : "gainsboro",
+          height: "100%",
         }}
       >
-        <div style={{ width: "100%", marginRight: "10px" }}>
-          <Select
-            styles={selectStyle}
-            options={options}
-            value={selectedDevice}
-            onChange={e => {
-              setSelectedDevice(e);
-              setProgress(defaultProgress);
-            }}
-          />
-        </div>
-        <div>
-          <Button
-            size="sm"
-            variant="outline-primary"
-            onClick={() => uploadFirmware()}
-          >
-            Upload
-          </Button>
-        </div>
-      </div>
-      <div style={{ padding: "10px" }}>
-        <div style={{ display: "inline-block" }}>
-          <Table size="sm">
-            <tbody>
-              <tr>
-                <td>Uploading</td>
-                <td>
-                  <input type="checkbox" readOnly checked={uploading} />
-                </td>
-              </tr>
-              <tr>
-                <td>Erase</td>
-                <td>
-                  <input type="checkbox" readOnly checked={progress.erasing} />
-                </td>
-              </tr>
-              <tr>
-                <td>Write</td>
-                <td>
-                  <ProgressBar
-                    now={progress.writeProgress}
-                    label={`${progress.writeProgress}%`}
+        <Box
+          sx={{
+            position: "absolute",
+            width: "88px",
+            backgroundColor: "whitesmoke",
+            whiteSpace: "nowrap",
+            height: "100%",
+            top: "0px",
+          }}
+        >
+          <Timeline>
+            <TimelineItem>
+              <TimelineSeparator>
+                <TimelineDot>
+                  <PlayCircleOutlineIcon
+                    style={iconStyle}
+                    color={uploading ? "success" : ""}
                   />
-                </td>
-              </tr>
-              <tr>
-                <td>Read</td>
-                <td>
-                  <input type="checkbox" readOnly checked={progress.reading} />
-                </td>
-              </tr>
-              <tr>
-                <td>Verify</td>
-                <td style={{ width: "200px" }}>
-                  <ProgressBar
-                    now={progress.verifyProgress}
-                    label={`${progress.verifyProgress}%`}
+                </TimelineDot>
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: "18px", px: 2 }}>
+                <Typography
+                  sx={{ fontWeight: uploading ? "bold" : "" }}
+                  component="span"
+                >
+                  Starting Upload
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineSeparator>
+                <TimelineDot>
+                  <DeleteSweepIcon
+                    style={iconStyle}
+                    color={progress.erasing ? "success" : ""}
                   />
-                </td>
-              </tr>
-              <tr>
-                <td>Complete</td>
-                <td>
-                  <input type="checkbox" readOnly checked={progress.complete} />
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        </div>
-      </div>
-    </div>
+                </TimelineDot>
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: "18px", px: 2 }}>
+                <Typography
+                  sx={{ fontWeight: progress.writeProgress > 0 ? "bold" : "" }}
+                  component="span"
+                >
+                  Erased
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineSeparator>
+                <TimelineDot>
+                  <UploadIcon
+                    style={iconStyle}
+                    color={progress.writeProgress > 0 ? "success" : ""}
+                  />
+                </TimelineDot>
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: "18px", px: 2 }}>
+                <Typography
+                  sx={{ fontWeight: progress.writeProgress > 0 ? "bold" : "" }}
+                  component="span"
+                >
+                  Writing{" "}
+                  {progress.writeProgress > 0
+                    ? progress.writeProgress + "%"
+                    : ""}
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineSeparator>
+                <TimelineDot>
+                  <DownloadIcon
+                    style={iconStyle}
+                    color={progress.reading ? "success" : ""}
+                  />
+                </TimelineDot>
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: "18px", px: 2 }}>
+                <Typography
+                  sx={{ fontWeight: progress.reading > 0 ? "bold" : "" }}
+                  component="span"
+                >
+                  Read
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineSeparator>
+                <TimelineDot>
+                  <CompareIcon
+                    style={iconStyle}
+                    color={progress.verifyProgress > 0 ? "success" : ""}
+                  />
+                </TimelineDot>
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: "18px", px: 2 }}>
+                <Typography
+                  sx={{ fontWeight: progress.verifyProgress > 0 ? "bold" : "" }}
+                  component="span"
+                >
+                  Verifying{" "}
+                  {progress.verifyProgress > 0
+                    ? progress.verifyProgress + "%"
+                    : ""}
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineSeparator>
+                <TimelineDot>
+                  <CheckCircleIcon
+                    style={iconStyle}
+                    color={progress.complete ? "success" : ""}
+                  />
+                </TimelineDot>
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: "18px", px: 2 }}>
+                <Typography
+                  sx={{ fontWeight: progress.complete ? "bold" : "" }}
+                  component="span"
+                >
+                  Complete
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+          </Timeline>
+        </Box>
+      </Box>
+    </>
   );
 }
+
+const iconStyle = { fontSize: "20px" };
