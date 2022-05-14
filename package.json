@@ -71,7 +71,11 @@
             "electron/*"
         ],
         "win": {
+            "target": "nsis",
             "icon": "public/favicon.ico"
+        },
+        "nsis": {
+            "include": "installer/win/nsis-installer.nsh"
         }
     },
     "repository": {
