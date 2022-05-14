@@ -34,7 +34,8 @@
         "upload": "yarn build && git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin master && yarn deploy ",
         "electron": "electron .",
         "refresh": "yarn upgrade --latest && yarn rebuild",
-        "try": "yarn build && yarn package "
+        "try": "yarn build && yarn package ",
+        "postinstall": "electron-builder install-app-deps"
     },
     "eslintConfig": {
         "extends": [
