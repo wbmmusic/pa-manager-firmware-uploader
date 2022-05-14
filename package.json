@@ -17,7 +17,7 @@
         "react-dom": "^18.1.0",
         "react-scripts": "5.0.1",
         "wbm-usb-device": "^0.2.57",
-        "wbm-version-manager": "^0.0.49",
+        "wbm-version-manager": "^0.0.51",
         "web-vitals": "^2.1.4"
     },
     "scripts": {
@@ -31,7 +31,7 @@
         "backup": "git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin master",
         "upload": "yarn build && git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin master && yarn deploy ",
         "electron": "electron .",
-        "refresh": "yarn upgrade --latest",
+        "refresh": "yarn upgrade --latest && yarn",
         "try": "yarn build && yarn package",
         "postinstall": "electron-builder install-app-deps"
     },
@@ -73,9 +73,6 @@
         "win": {
             "target": "nsis",
             "icon": "public/favicon.ico"
-        },
-        "nsis": {
-            "include": "installer/win/nsis-installer.nsh"
         }
     },
     "repository": {
