@@ -72,7 +72,7 @@ const handleLine = async(line) => {
                         // Put New / Current Firmware in folder
                         await downloadFirmware(currentFirmware.id, join(pathToDevice, currentFirmware.name))
                         console.log("Updated Firmware", currentFirmware)
-                        addNotification({ type: "fw updated", message: element.name + " FW updated to " + currentFirmware.version })
+                            //addNotification({ type: "fw updated", message: element.name + " FW updated to " + currentFirmware.version })
                         win.webContents.send('updatedFirmware', currentFirmware)
                         win.webContents.send('refreshFW', currentFirmware)
                     } catch (error) {
@@ -130,7 +130,7 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
 const createWindow = () => {
     // Create the browser window.
     win = new BrowserWindow({
-        width: 600,
+        width: 550,
         height: 590,
         show: false,
         autoHideMenuBar: true,

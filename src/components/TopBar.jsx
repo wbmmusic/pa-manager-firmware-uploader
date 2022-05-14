@@ -78,10 +78,12 @@ export default function TopBar() {
   }, []);
 
   const uploadFirmware = () => {
+    setProgress(defaultProgress);
     window.api.send("chooseUpload", selectedDevice.value);
   };
 
   const uploadCurrentFirmware = () => {
+    setProgress(defaultProgress);
     window.api.send(
       "uploadCurrent",
       devices.find(dev => dev.path === selectedDevice.value)
@@ -106,9 +108,23 @@ export default function TopBar() {
 
   const handleDevicesClose = () => setMenuAnchor(null);
 
-  const selectedDeviceInfo = devices.find(
-    dev => dev.path === selectedDevice.value
-  );
+  const makeBoardInfo = () => {
+    if (!selectedDeviceInfo) return "No device selected";
+    else if (selectedDeviceInfo.firmware === selectedDeviceInfo.curfw) {
+      return `${selectedDevice.label} - Up To Date`;
+    } else {
+      return `${selectedDevice.label} - from: ${selectedDeviceInfo.firmware} to: ${selectedDeviceInfo.curfw}`;
+    }
+  };
+
+  const makeSelDevInfo = () => {
+    if (selectedDevice === null) return null;
+    else {
+      return devices.find(dev => dev.path === selectedDevice.value);
+    }
+  };
+
+  const selectedDeviceInfo = makeSelDevInfo();
 
   return (
     <>
@@ -158,7 +174,7 @@ export default function TopBar() {
             size="small"
             variant="contained"
             color="warning"
-            disabled={!selectedDevice}
+            disabled={!selectedDeviceInfo}
             onClick={() => uploadFirmware()}
             sx={{ whiteSpace: "nowrap", minWidth: "auto" }}
           >
@@ -168,7 +184,7 @@ export default function TopBar() {
             size="small"
             variant="contained"
             color="success"
-            disabled={!selectedDevice}
+            disabled={!selectedDeviceInfo}
             onClick={() => uploadCurrentFirmware()}
             sx={{ whiteSpace: "nowrap", minWidth: "auto" }}
           >
@@ -188,9 +204,7 @@ export default function TopBar() {
                 : "",
           }}
         >
-          {selectedDeviceInfo
-            ? `${selectedDevice.label} - from: ${selectedDeviceInfo.firmware} to: ${selectedDeviceInfo.curfw}`
-            : "No device Selected"}
+          {makeBoardInfo()}
         </Typography>
       </Box>
       <Divider />
