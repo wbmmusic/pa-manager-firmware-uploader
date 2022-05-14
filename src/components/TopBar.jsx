@@ -169,8 +169,13 @@ export default function TopBar() {
       <Divider />
       <Box p={1}>
         <Typography variant="body2">
-          {selectedDevice !== null
-            ? selectedDevice.label
+          {selectedDevice !== null &&
+          devices.find(dev => dev.path === selectedDevice.value)
+            ? `${selectedDevice.label} - from: ${
+                devices.find(dev => dev.path === selectedDevice.value).firmware
+              } to: ${
+                devices.find(dev => dev.path === selectedDevice.value).curfw
+              }`
             : "No device Selected"}
         </Typography>
       </Box>

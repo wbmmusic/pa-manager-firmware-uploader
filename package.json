@@ -68,7 +68,6 @@
         "appId": "com.wbm.pa-manager-firmware-uploader",
         "copyright": "WBM Tek",
         "extends": null,
-        "npmRebuild": false,
         "files": [
             "build/**/*",
             "electron/*"
