@@ -7,6 +7,7 @@ import {
   TimelineSeparator,
 } from "@mui/lab";
 import {
+  Box,
   Button,
   Divider,
   Typography,
@@ -23,7 +24,6 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CompareIcon from "@mui/icons-material/Compare";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box } from "@mui/system";
 
 export default function TopBar() {
   const defaultProgress = {
@@ -46,6 +46,12 @@ export default function TopBar() {
         setDevices([]);
       } else {
         setDevices(tempDevices);
+        if (tempDevices.length === 1) {
+          setSelectedDevice({
+            label: `${tempDevices[0].Model} | ${tempDevices[0].UserName} | ${tempDevices[0].path}`,
+            value: tempDevices[0].path,
+          });
+        }
       }
     });
 
@@ -99,6 +105,10 @@ export default function TopBar() {
   const handleDevicesClick = e => setMenuAnchor(e.currentTarget);
 
   const handleDevicesClose = () => setMenuAnchor(null);
+
+  const selectedDeviceInfo = devices.find(
+    dev => dev.path === selectedDevice.value
+  );
 
   return (
     <>
@@ -168,17 +178,22 @@ export default function TopBar() {
       </Box>
       <Divider />
       <Box p={1}>
-        <Typography variant="body2">
-          {selectedDevice !== null &&
-          devices.find(dev => dev.path === selectedDevice.value)
-            ? `${selectedDevice.label} - from: ${
-                devices.find(dev => dev.path === selectedDevice.value).firmware
-              } to: ${
-                devices.find(dev => dev.path === selectedDevice.value).curfw
-              }`
+        <Typography
+          variant="body2"
+          sx={{
+            color:
+              selectedDeviceInfo &&
+              selectedDeviceInfo.firmware !== selectedDeviceInfo.curfw
+                ? "red"
+                : "",
+          }}
+        >
+          {selectedDeviceInfo
+            ? `${selectedDevice.label} - from: ${selectedDeviceInfo.firmware} to: ${selectedDeviceInfo.curfw}`
             : "No device Selected"}
         </Typography>
       </Box>
+      <Divider />
       <Box
         sx={{
           position: "relative",
