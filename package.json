@@ -16,7 +16,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-scripts": "5.0.1",
-        "wbm-usb-device": "^0.2.58",
+        "wbm-usb-device": "^0.2.59",
         "wbm-version-manager": "^0.0.51",
         "web-vitals": "^3.0.2"
     },
