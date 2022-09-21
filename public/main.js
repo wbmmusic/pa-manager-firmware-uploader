@@ -172,7 +172,6 @@ app.on('ready', () => {
 
                 wbmUsb.on('devList', (data) => {
                     console.log('DEV LIST YO', data)
-
                     win.webContents.send('devList', processDevList(data))
                 })
 

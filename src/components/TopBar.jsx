@@ -45,7 +45,7 @@ export default function TopBar() {
       if (tempDevices.length === 0) {
         setDevices([]);
       } else {
-        setDevices(tempDevices);
+        setDevices(JSON.parse(JSON.stringify(tempDevices)));
         if (tempDevices.length === 1) {
           setSelectedDevice({
             label: `${tempDevices[0].Model} | ${tempDevices[0].UserName} | ${tempDevices[0].path}`,
