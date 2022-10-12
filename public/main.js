@@ -1,5 +1,5 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron')
-const wbmUsb = require('wbm-usb-device')
+const { usbDevices, startMonitoringUsb, usbUploadFirmware, wbmUsbDevices } = require('io-manager-usb-bootloader')
 const { join } = require('path')
 const url = require('url')
 const { existsSync, mkdirSync, unlinkSync, readdirSync } = require('fs')
@@ -131,7 +131,7 @@ const createWindow = () => {
     // Create the browser window.
     win = new BrowserWindow({
         width: 550,
-        height: 590,
+        height: 450,
         show: false,
         autoHideMenuBar: true,
         webPreferences: {
@@ -152,7 +152,7 @@ const createWindow = () => {
 
     // Emitted when the window is closed.
     win.on('closed', () => win = null)
-    win.on('close', () => wbmUsb.removeAllListeners())
+    win.on('close', () => usbDevices.removeAllListeners())
     win.on('ready-to-show', () => win.show())
 }
 
@@ -170,31 +170,46 @@ app.on('ready', () => {
         ipcMain.on('reactIsReady', () => {
             if (firstReactInit === true) {
 
-                wbmUsb.on('devList', (data) => {
-                    console.log('DEV LIST YO', data)
+                usbDevices.on('devList', (data) => {
+                    // console.log('DEV LIST YO', data)
                     win.webContents.send('devList', processDevList(data))
                 })
 
-                wbmUsb.on('data', (path, data) => {
-                    console.log('Data from ' + path + " ->", data.toString())
-                    win.webContents.send('serialData', path + " -> " + data.toString())
+                usbDevices.on('usbUploadProgress', (progress) => {
+                    switch (progress.state) {
+                        case 'uploading':
+                            // console.log(progress.progress)
+                            win.webContents.send('progress', progress.progress)
+                            break;
+
+                        case 'enteringBootloader':
+                            console.log("Entering Bootloader")
+                            win.webContents.send('uploading')
+                            break;
+
+                        case 'uploadingFirmware':
+                            console.log("Uploading Firmware")
+                            win.webContents.send('uploading')
+                            break;
+
+                        case 'waitingForReboot':
+                            console.log("Waiting for reboot")
+                            win.webContents.send('rebooting')
+                            break;
+
+                        case 'uploadComplete':
+                            console.log("Upload Complete")
+                            win.webContents.send('uploadFinished')
+                            break;
+
+                        default:
+                            console.log("Unknown usbUploadProgress state")
+                            break;
+                    }
+
                 })
 
-                wbmUsb.on('progress', (data) => {
-                    win.webContents.send('progress', data)
-                })
-
-                wbmUsb.on('fwUploadFinished', () => {
-                    console.log('FW Upload Finished')
-                    win.webContents.send('uploadFinished')
-                })
-
-                wbmUsb.on('fwUploading', () => {
-                    console.log('FW Uploading')
-                    win.webContents.send('uploading')
-                })
-
-                wbmUsb.startMonitoring()
+                startMonitoringUsb()
 
                 firstReactInit = false
 
@@ -234,7 +249,7 @@ app.on('ready', () => {
 
         })
 
-        ipcMain.on('chooseUpload', (e, path) => {
+        ipcMain.on('chooseUpload', (e, serialNumber) => {
             console.log('Were Gonna Upload a file')
 
             let pathToFirmware
@@ -252,8 +267,8 @@ app.on('ready', () => {
                 } else {
                     console.log(result.filePaths[0])
                     pathToFirmware = result.filePaths[0]
-                    console.log('THIS STUFF ____', path, pathToFirmware)
-                    wbmUsb.uploadFirmware(path, pathToFirmware)
+                    console.log('THIS STUFF ____', serialNumber, pathToFirmware)
+                    usbUploadFirmware(serialNumber, pathToFirmware)
                 }
             }).catch(err => {
                 console.log(err)
@@ -267,14 +282,15 @@ app.on('ready', () => {
             const binFile = deviceFiles.filter(file => file.includes('.bin'))
             if (binFile.length === 0) console.log("no fw")
             else {
-                wbmUsb.uploadFirmware(dev.path, join(pathToDeviceFolder, binFile[0]))
+                console.log(dev.serialNumber)
+                usbUploadFirmware(dev.serialNumber, join(pathToDeviceFolder, binFile[0]))
             }
 
         })
 
         ipcMain.on('getDevices', () => {
             console.log('GET DEVICES')
-            win.webContents.send('devList', processDevList(wbmUsb.wbmDevices))
+            win.webContents.send('devList', processDevList(wbmUsbDevices))
         })
 
         createWindow()

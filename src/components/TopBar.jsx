@@ -24,6 +24,7 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CompareIcon from "@mui/icons-material/Compare";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 export default function TopBar() {
   const defaultProgress = {
@@ -49,14 +50,14 @@ export default function TopBar() {
         if (tempDevices.length === 1) {
           setSelectedDevice({
             label: `${tempDevices[0].Model} | ${tempDevices[0].UserName} | ${tempDevices[0].path}`,
-            value: tempDevices[0].path,
+            value: tempDevices[0].serialNumber,
           });
         }
       }
     });
 
     window.api.receive("progress", (e, theData) => {
-      setProgress(theData);
+      setProgress({ writeProgress: theData });
     });
 
     window.api.receive("uploading", e => {
@@ -64,7 +65,12 @@ export default function TopBar() {
     });
 
     window.api.receive("uploadFinished", e => {
+      setProgress(old => ({ ...old, complete: true }));
       setSelectedDevice(null);
+    });
+
+    window.api.receive("rebooting", () => {
+      setProgress(old => ({ ...old, rebooting: true }));
     });
 
     window.api.send("getDevices");
@@ -86,7 +92,7 @@ export default function TopBar() {
     setProgress(defaultProgress);
     window.api.send(
       "uploadCurrent",
-      devices.find(dev => dev.path === selectedDevice.value)
+      devices.find(dev => dev.serialNumber === selectedDevice.value)
     );
   };
 
@@ -113,14 +119,14 @@ export default function TopBar() {
     else if (selectedDeviceInfo.firmware === selectedDeviceInfo.curfw) {
       return `${selectedDevice.label} - Up To Date`;
     } else {
-      return `${selectedDevice.label} - from: ${selectedDeviceInfo.firmware} to: ${selectedDeviceInfo.curfw}`;
+      return `${selectedDevice.label} - from: ${selectedDeviceInfo.Firmware} to: ${selectedDeviceInfo.curfw}`;
     }
   };
 
   const makeSelDevInfo = () => {
     if (selectedDevice === null) return null;
     else {
-      return devices.find(dev => dev.path === selectedDevice.value);
+      return devices.find(dev => dev.serialNumber === selectedDevice.value);
     }
   };
 
@@ -156,7 +162,7 @@ export default function TopBar() {
                     onClick={() => {
                       setSelectedDevice({
                         label: `${dev.Model} | ${dev.UserName} | ${dev.path}`,
-                        value: dev.path,
+                        value: dev.serialNumber,
                       });
                       setProgress(defaultProgress);
                       setUploading(false);
@@ -169,7 +175,6 @@ export default function TopBar() {
               ))}
             </Menu>
           </Box>
-
           <Button
             size="small"
             variant="contained"
@@ -248,25 +253,6 @@ export default function TopBar() {
             <TimelineItem>
               <TimelineSeparator>
                 <TimelineDot>
-                  <DeleteSweepIcon
-                    style={iconStyle}
-                    color={progress.erasing ? "success" : ""}
-                  />
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: "18px", px: 2 }}>
-                <Typography
-                  sx={{ fontWeight: progress.writeProgress > 0 ? "bold" : "" }}
-                  component="span"
-                >
-                  Erased
-                </Typography>
-              </TimelineContent>
-            </TimelineItem>
-            <TimelineItem>
-              <TimelineSeparator>
-                <TimelineDot>
                   <UploadIcon
                     style={iconStyle}
                     color={progress.writeProgress > 0 ? "success" : ""}
@@ -289,41 +275,18 @@ export default function TopBar() {
             <TimelineItem>
               <TimelineSeparator>
                 <TimelineDot>
-                  <DownloadIcon
+                  <RestartAltIcon
                     style={iconStyle}
-                    color={progress.reading ? "success" : ""}
+                    color={progress.rebooting ? "success" : ""}
                   />
                 </TimelineDot>
-                <TimelineConnector />
               </TimelineSeparator>
               <TimelineContent sx={{ py: "18px", px: 2 }}>
                 <Typography
-                  sx={{ fontWeight: progress.reading > 0 ? "bold" : "" }}
+                  sx={{ fontWeight: progress.rebooting ? "bold" : "" }}
                   component="span"
                 >
-                  Read
-                </Typography>
-              </TimelineContent>
-            </TimelineItem>
-            <TimelineItem>
-              <TimelineSeparator>
-                <TimelineDot>
-                  <CompareIcon
-                    style={iconStyle}
-                    color={progress.verifyProgress > 0 ? "success" : ""}
-                  />
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: "18px", px: 2 }}>
-                <Typography
-                  sx={{ fontWeight: progress.verifyProgress > 0 ? "bold" : "" }}
-                  component="span"
-                >
-                  Verifying{" "}
-                  {progress.verifyProgress > 0
-                    ? progress.verifyProgress + "%"
-                    : ""}
+                  Rebooting
                 </Typography>
               </TimelineContent>
             </TimelineItem>
