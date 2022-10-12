@@ -17,12 +17,9 @@ import {
   Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import UploadIcon from "@mui/icons-material/Upload";
-import DownloadIcon from "@mui/icons-material/Download";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CompareIcon from "@mui/icons-material/Compare";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
@@ -116,7 +113,7 @@ export default function TopBar() {
 
   const makeBoardInfo = () => {
     if (!selectedDeviceInfo) return "No device selected";
-    else if (selectedDeviceInfo.firmware === selectedDeviceInfo.curfw) {
+    else if (selectedDeviceInfo.Firmware === selectedDeviceInfo.curfw) {
       return `${selectedDevice.label} - Up To Date`;
     } else {
       return `${selectedDevice.label} - from: ${selectedDeviceInfo.Firmware} to: ${selectedDeviceInfo.curfw}`;
@@ -155,7 +152,7 @@ export default function TopBar() {
               {devices.map(dev => (
                 <Tooltip
                   key={dev.serialNumber}
-                  title={`Installed: ${dev.firmware} | Current: ${dev.curfw}`}
+                  title={`Installed: ${dev.Firmware} | Current: ${dev.curfw}`}
                   placement="bottom"
                 >
                   <MenuItem
@@ -189,7 +186,10 @@ export default function TopBar() {
             size="small"
             variant="contained"
             color="success"
-            disabled={!selectedDeviceInfo}
+            disabled={
+              !selectedDeviceInfo ||
+              selectedDeviceInfo.Firmware === selectedDeviceInfo.curfw
+            }
             onClick={() => uploadCurrentFirmware()}
             sx={{ whiteSpace: "nowrap", minWidth: "auto" }}
           >
@@ -204,7 +204,7 @@ export default function TopBar() {
           sx={{
             color:
               selectedDeviceInfo &&
-              selectedDeviceInfo.firmware !== selectedDeviceInfo.curfw
+              selectedDeviceInfo.Firmware !== selectedDeviceInfo.curfw
                 ? "red"
                 : "",
           }}
@@ -280,6 +280,7 @@ export default function TopBar() {
                     color={progress.rebooting ? "success" : ""}
                   />
                 </TimelineDot>
+                <TimelineConnector />
               </TimelineSeparator>
               <TimelineContent sx={{ py: "18px", px: 2 }}>
                 <Typography
