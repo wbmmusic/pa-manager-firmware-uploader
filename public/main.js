@@ -236,7 +236,10 @@ app.on('ready', () => {
                 autoUpdater.on('update-not-available', () => win.webContents.send('noUpdate'))
                 autoUpdater.on('update-downloaded', (e, updateInfo, f, g) => { win.webContents.send('updateDownloaded', e) })
                 autoUpdater.on('download-progress', (e) => { win.webContents.send('updateDownloadProgress', e.percent) })
-                autoUpdater.on('error', (e, message) => win.webContents.send('updateError', message))
+                autoUpdater.on('error', (e, message) => {
+                    console.log(e, message)
+                    win.webContents.send('updateError', message)
+                })
 
 
                 setInterval(() => {
@@ -299,15 +302,11 @@ app.on('ready', () => {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+    if (process.platform !== 'darwin') app.quit()
 })
 
 app.on('activate', () => {
-    if (win === null) {
-        createWindow()
-    }
+    if (win === null) createWindow()
 })
 
 ////////////////// END App Startup ///////////////////////////////////////////////////////////////
