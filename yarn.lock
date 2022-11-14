@@ -3171,14 +3171,6 @@ axe-core@^4.4.3:
   resolved "https://registry.npmjs.org/axe-core/-/axe-core-4.4.3.tgz"
   integrity sha512-32+ub6kkdhhWick/UjvEwRchgoetXqTK14INLqbGm5U2TzBkBNF3nQtLYm8ovxSkQWArjEQvftCKryjZaATu3w==
 
-axios@^0.27.2:
-  version "0.27.2"
-  resolved "https://registry.npmjs.org/axios/-/axios-0.27.2.tgz"
-  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
-  dependencies:
-    follow-redirects "^1.14.9"
-    form-data "^4.0.0"
-
 axobject-query@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/axobject-query/-/axobject-query-2.2.0.tgz"
@@ -5292,7 +5284,7 @@ flatted@^3.1.0:
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.2.7.tgz"
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
 
-follow-redirects@^1.0.0, follow-redirects@^1.14.9:
+follow-redirects@^1.0.0:
   version "1.15.2"
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.2.tgz"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
@@ -10050,12 +10042,10 @@ watchpack@^2.4.0:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
-wbm-version-manager@^0.0.51:
-  version "0.0.51"
-  resolved "https://registry.npmjs.org/wbm-version-manager/-/wbm-version-manager-0.0.51.tgz"
-  integrity sha512-ykzfXLXxgymN+6QZrTKU7uD9VnAw2RF6/kpc44JxYK1N9DPb0Zs+YU8gKgpjAIyW3k8dA2n4cEVFIb49Q6qhMw==
-  dependencies:
-    axios "^0.27.2"
+wbm-version-manager@^0.0.53:
+  version "0.0.53"
+  resolved "https://registry.yarnpkg.com/wbm-version-manager/-/wbm-version-manager-0.0.53.tgz#dd8c079aab96c0479bf5482b6bc191d162e27f81"
+  integrity sha512-Q5kx0BpfeU/B1y+9ykuKg5wKec9opPEsh4DXgiMs0Qksp2V6OYDmD1tqQ+xw+ZxSQkBUzKDB4KCWgq3PvWZUJw==
 
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"

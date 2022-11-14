@@ -19,7 +19,7 @@
         "react-scripts": "5.0.1",
         "serialport": "^10.4.0",
         "usb": "^2.5.2",
-        "wbm-version-manager": "^0.0.51",
+        "wbm-version-manager": "^0.0.53",
         "web-vitals": "^3.0.4"
     },
     "scripts": {
