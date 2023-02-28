@@ -10024,10 +10024,10 @@ watchpack@^2.4.0:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
-wbm-version-manager@^0.0.62:
-  version "0.0.62"
-  resolved "https://registry.yarnpkg.com/wbm-version-manager/-/wbm-version-manager-0.0.62.tgz#1cb8e287b8b39d20f664c67ca4f53f87cee31d5f"
-  integrity sha512-Jn9FwTIOZPQVh/XmO9CJoYuXcSH6szCN5iuZ8wi8Apw5pksvT67cSE7GNh1RYUGbK3V3LDuO69QoqLmii5uWaw==
+wbm-version-manager@^0.0.65:
+  version "0.0.65"
+  resolved "https://registry.yarnpkg.com/wbm-version-manager/-/wbm-version-manager-0.0.65.tgz#931d8d7b15854c22c2064fd1bd629d3b7ffb5712"
+  integrity sha512-KBqFKhVkMJ4yRUTeuJ/W7HPg09fj6Y82CLQgvhGW7JAwJyasoZzr+rVPDj9dMQOzP89hplQj6p0NV/QKIe/HBg==
 
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"
