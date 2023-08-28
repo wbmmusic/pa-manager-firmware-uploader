@@ -11,7 +11,7 @@
         "@testing-library/jest-dom": "^6.1.2",
         "@testing-library/react": "^14.0.0",
         "@testing-library/user-event": "^14.4.3",
-        "axios": "^1.4.0",
+        "axios": "^1.5.0",
         "electron-updater": "^6.1.1",
         "foreman": "^3.0.1",
         "io-manager-usb-bootloader": "^0.0.9",
