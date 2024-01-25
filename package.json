@@ -11,7 +11,7 @@
         "@testing-library/jest-dom": "^6.3.0",
         "@testing-library/react": "^14.1.2",
         "@testing-library/user-event": "^14.5.2",
-        "axios": "^1.6.6",
+        "axios": "^1.6.7",
         "electron-updater": "^6.1.7",
         "foreman": "^3.0.1",
         "io-manager-usb-bootloader": "^0.0.9",
@@ -21,7 +21,7 @@
         "serialport": "^12.0.0",
         "usb": "^2.11.0",
         "wbm-version-manager": "^0.0.69",
-        "web-vitals": "^3.5.1"
+        "web-vitals": "^3.5.2"
     },
     "scripts": {
         "start": "react-scripts start",
