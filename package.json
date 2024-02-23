@@ -1,6 +1,6 @@
 {
     "name": "io-manager-firmware-uploader",
-    "version": "0.0.60",
+    "version": "0.0.61",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.11.3",
