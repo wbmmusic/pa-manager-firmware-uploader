@@ -1,6 +1,6 @@
 {
     "name": "io-manager-firmware-uploader",
-    "version": "0.0.57",
+    "version": "0.0.58",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.11.3",
@@ -76,7 +76,8 @@
         "win": {
             "target": "nsis",
             "icon": "public/favicon.ico",
-            "publisherName": "William Mareci"
+            "publisherName": "WBM Tek",
+            "certificateSubjectName": "WBM Tek (Mareci, William)"
         }
     },
     "repository": {
