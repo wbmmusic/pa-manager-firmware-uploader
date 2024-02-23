@@ -33,14 +33,14 @@ const checkFolderStructure = () => {
     } else console.log("Found Devices Folder")
 }
 
-const handleLine = async(line) => {
+const handleLine = async (line) => {
     console.log("Line Name:", line.name)
     console.log("Last Mod:", new Date(line.modified).toLocaleDateString())
     console.log("# of devices:", line.devices.length)
 
     //console.log(JSON.stringify(line, null, " "))
 
-    await line.devices.reduce(async(acc, element) => {
+    await line.devices.reduce(async (acc, element) => {
         await acc
 
         //console.log("EL", element)
@@ -72,7 +72,7 @@ const handleLine = async(line) => {
                         // Put New / Current Firmware in folder
                         await downloadFirmware(currentFirmware.id, join(pathToDevice, currentFirmware.name))
                         console.log("Updated Firmware", currentFirmware)
-                            //addNotification({ type: "fw updated", message: element.name + " FW updated to " + currentFirmware.version })
+                        //addNotification({ type: "fw updated", message: element.name + " FW updated to " + currentFirmware.version })
                         win.webContents.send('updatedFirmware', currentFirmware)
                         win.webContents.send('refreshFW', currentFirmware)
                     } catch (error) {
@@ -90,7 +90,7 @@ const handleLine = async(line) => {
     //space()
 }
 
-const checkForFwUpdates = async() => {
+const checkForFwUpdates = async () => {
     try {
         let lines = await getLines()
         if (lines === undefined) console.log("LINES IS UNDEFINED")
@@ -116,16 +116,16 @@ const getCurVerInFolder = (board) => {
 }
 
 checkFolderStructure()
-    /////////////////////////////////////////////
+/////////////////////////////////////////////
 
 app.on('second-instance', (event, commandLine, workingDirectory) => {
-        // Someone tried to run a second instance, we should focus our window.
-        if (win) {
-            if (win.isMinimized()) win.restore()
-            win.focus()
-        }
-    })
-    //////  END SINGLE INSTANCE ////////
+    // Someone tried to run a second instance, we should focus our window.
+    if (win) {
+        if (win.isMinimized()) win.restore()
+        win.focus()
+    }
+})
+//////  END SINGLE INSTANCE ////////
 
 const createWindow = () => {
     // Create the browser window.
@@ -166,139 +166,139 @@ const processDevList = data => {
 
 // Create myWindow, load the rest of the app, etc...
 app.on('ready', () => {
-        //log("-APP IS READY");
-        ipcMain.on('reactIsReady', () => {
-            if (firstReactInit === true) {
+    //log("-APP IS READY");
+    ipcMain.on('reactIsReady', () => {
+        if (firstReactInit === true) {
 
-                usbDevices.on('devList', (data) => {
-                    // console.log('DEV LIST YO', data)
-                    win.webContents.send('devList', processDevList(data))
-                })
-
-                usbDevices.on('usbUploadProgress', (progress) => {
-                    switch (progress.state) {
-                        case 'uploading':
-                            // console.log(progress.progress)
-                            win.webContents.send('progress', progress.progress)
-                            break;
-
-                        case 'enteringBootloader':
-                            console.log("Entering Bootloader")
-                            win.webContents.send('uploading')
-                            break;
-
-                        case 'uploadingFirmware':
-                            console.log("Uploading Firmware")
-                            win.webContents.send('uploading')
-                            break;
-
-                        case 'waitingForReboot':
-                            console.log("Waiting for reboot")
-                            win.webContents.send('rebooting')
-                            break;
-
-                        case 'uploadComplete':
-                            console.log("Upload Complete")
-                            win.webContents.send('uploadFinished')
-                            break;
-
-                        default:
-                            console.log("Unknown usbUploadProgress state")
-                            break;
-                    }
-
-                })
-
-                startMonitoringUsb()
-
-                firstReactInit = false
-
-                checkForFwUpdates()
-                setInterval(() => {
-                    checkForFwUpdates()
-                }, 10 * 60 * 1000);
-            }
-
-
-            console.log('React Is Ready')
-            win.webContents.send('message', 'React Is Ready')
-            win.webContents.send('app_version', { version: app.getVersion() });
-
-            if (app.isPackaged) {
-                win.webContents.send('message', 'App is packaged')
-
-                ipcMain.on('installUpdate', () => {
-                    autoUpdater.quitAndInstall(true, true)
-                })
-
-                autoUpdater.on('checking-for-update', () => win.webContents.send('checkingForUpdates'))
-                autoUpdater.on('update-available', () => win.webContents.send('updateAvailable'))
-                autoUpdater.on('update-not-available', () => win.webContents.send('noUpdate'))
-                autoUpdater.on('update-downloaded', (e, updateInfo, f, g) => { win.webContents.send('updateDownloaded', e) })
-                autoUpdater.on('download-progress', (e) => { win.webContents.send('updateDownloadProgress', e.percent) })
-                autoUpdater.on('error', (e, message) => {
-                    console.log(e, message)
-                    win.webContents.send('updateError', message)
-                })
-
-
-                setInterval(() => {
-                    win.webContents.send('message', 'Interval Check for update')
-                    autoUpdater.checkForUpdatesAndNotify()
-                }, 600000);
-
-                autoUpdater.checkForUpdatesAndNotify()
-            }
-
-        })
-
-        ipcMain.on('chooseUpload', (e, serialNumber) => {
-            console.log('Were Gonna Upload a file')
-
-            let pathToFirmware
-
-            console.log('IN FIRMWARE SELECT') // prints "ping"
-
-            dialog.showOpenDialog(win, {
-                properties: ['openFile'],
-                filters: [
-                    { name: 'Firmware File', extensions: ['bin'] }
-                ]
-            }).then(result => {
-                if (result.canceled) {
-                    console.log('FIRMWARE SELECT CANCELED')
-                } else {
-                    console.log(result.filePaths[0])
-                    pathToFirmware = result.filePaths[0]
-                    console.log('THIS STUFF ____', serialNumber, pathToFirmware)
-                    usbUploadFirmware(serialNumber, pathToFirmware)
-                }
-            }).catch(err => {
-                console.log(err)
+            usbDevices.on('devList', (data) => {
+                // console.log('DEV LIST YO', data)
+                win.webContents.send('devList', processDevList(data))
             })
-        })
 
-        ipcMain.on('uploadCurrent', (e, dev) => {
-            console.log(dev)
-            const pathToDeviceFolder = join(pathToDevices, dev.Model.toLowerCase().replaceAll(" ", ""))
-            const deviceFiles = readdirSync(pathToDeviceFolder)
-            const binFile = deviceFiles.filter(file => file.includes('.bin'))
-            if (binFile.length === 0) console.log("no fw")
-            else {
-                console.log(dev.serialNumber)
-                usbUploadFirmware(dev.serialNumber, join(pathToDeviceFolder, binFile[0]))
-            }
+            usbDevices.on('usbUploadProgress', (progress) => {
+                switch (progress.state) {
+                    case 'uploading':
+                        // console.log(progress.progress)
+                        win.webContents.send('progress', progress.progress)
+                        break;
 
-        })
+                    case 'enteringBootloader':
+                        console.log("Entering Bootloader")
+                        win.webContents.send('uploading')
+                        break;
 
-        ipcMain.on('getDevices', () => {
-            console.log('GET DEVICES')
-            win.webContents.send('devList', processDevList(wbmUsbDevices))
-        })
+                    case 'uploadingFirmware':
+                        console.log("Uploading Firmware")
+                        win.webContents.send('uploading')
+                        break;
 
-        createWindow()
+                    case 'waitingForReboot':
+                        console.log("Waiting for reboot")
+                        win.webContents.send('rebooting')
+                        break;
+
+                    case 'uploadComplete':
+                        console.log("Upload Complete")
+                        win.webContents.send('uploadFinished')
+                        break;
+
+                    default:
+                        console.log("Unknown usbUploadProgress state")
+                        break;
+                }
+
+            })
+
+            startMonitoringUsb()
+
+            firstReactInit = false
+
+            checkForFwUpdates()
+            setInterval(() => {
+                checkForFwUpdates()
+            }, 10 * 60 * 1000);
+        }
+
+
+        console.log('React Is Ready')
+        win.webContents.send('message', 'React Is Ready')
+        win.webContents.send('app_version', { version: app.getVersion() });
+
+        if (app.isPackaged) {
+            win.webContents.send('message', 'App is packaged')
+
+            ipcMain.on('installUpdate', () => {
+                autoUpdater.quitAndInstall(true, true)
+            })
+
+            autoUpdater.on('checking-for-update', () => win.webContents.send('checkingForUpdates'))
+            autoUpdater.on('update-available', () => win.webContents.send('updateAvailable'))
+            autoUpdater.on('update-not-available', () => win.webContents.send('noUpdate'))
+            autoUpdater.on('update-downloaded', (e, updateInfo, f, g) => { win.webContents.send('updateDownloaded', e) })
+            autoUpdater.on('download-progress', (e) => { win.webContents.send('updateDownloadProgress', e.percent) })
+            autoUpdater.on('error', (e, message) => {
+                console.log(e, message)
+                win.webContents.send('updateError', message)
+            })
+
+
+            setInterval(() => {
+                win.webContents.send('message', 'Interval Check for update')
+                autoUpdater.checkForUpdatesAndNotify()
+            }, 600000);
+
+            autoUpdater.checkForUpdatesAndNotify()
+        }
+
     })
-    ///////////////////////
+
+    ipcMain.on('chooseUpload', (e, serialNumber) => {
+        console.log('Were Gonna Upload a file')
+
+        let pathToFirmware
+
+        console.log('IN FIRMWARE SELECT') // prints "ping"
+
+        dialog.showOpenDialog(win, {
+            properties: ['openFile'],
+            filters: [
+                { name: 'Firmware File', extensions: ['bin'] }
+            ]
+        }).then(result => {
+            if (result.canceled) {
+                console.log('FIRMWARE SELECT CANCELED')
+            } else {
+                console.log(result.filePaths[0])
+                pathToFirmware = result.filePaths[0]
+                console.log('THIS STUFF ____', serialNumber, pathToFirmware)
+                usbUploadFirmware(serialNumber, pathToFirmware)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    })
+
+    ipcMain.on('uploadCurrent', (e, dev) => {
+        console.log(dev)
+        const pathToDeviceFolder = join(pathToDevices, dev.Model.toLowerCase().replaceAll(" ", ""))
+        const deviceFiles = readdirSync(pathToDeviceFolder)
+        const binFile = deviceFiles.filter(file => file.includes('.bin'))
+        if (binFile.length === 0) console.log("no fw")
+        else {
+            console.log(dev.serialNumber)
+            usbUploadFirmware(dev.serialNumber, join(pathToDeviceFolder, binFile[0]))
+        }
+
+    })
+
+    ipcMain.on('getDevices', () => {
+        console.log('GET DEVICES')
+        win.webContents.send('devList', processDevList(wbmUsbDevices))
+    })
+
+    createWindow()
+})
+///////////////////////
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
