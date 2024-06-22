@@ -21,7 +21,7 @@
         "serialport": "^12.0.0",
         "usb": "^2.13.0",
         "wbm-version-manager": "^0.0.69",
-        "web-vitals": "^4.1.1"
+        "web-vitals": "^4.2.0"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -57,7 +57,7 @@
         ]
     },
     "devDependencies": {
-        "electron": "^31.0.1",
+        "electron": "^31.0.2",
         "electron-builder": "^24.13.3"
     },
     "author": "Marece Williams",
