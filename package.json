@@ -58,7 +58,7 @@
     },
     "devDependencies": {
         "electron": "^32.2.0",
-        "electron-builder": "^25.1.7"
+        "electron-builder": "^25.1.8"
     },
     "author": "Marece Williams",
     "description": "Enter a description",
