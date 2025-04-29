@@ -11,7 +11,7 @@
         "@testing-library/jest-dom": "^6.6.3",
         "@testing-library/react": "^16.3.0",
         "@testing-library/user-event": "^14.6.1",
-        "axios": "^1.8.4",
+        "axios": "^1.9.0",
         "electron-updater": "^6.6.2",
         "foreman": "^3.0.1",
         "io-manager-usb-bootloader": "^0.0.9",
@@ -57,7 +57,7 @@
         ]
     },
     "devDependencies": {
-        "electron": "^35.2.0",
+        "electron": "^36.0.0",
         "electron-builder": "^26.0.12"
     },
     "author": "Marece Williams",
