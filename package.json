@@ -5,14 +5,14 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.6",
-    "@mui/lab": "7.0.1-beta.20",
-    "@mui/material": "^7.3.6",
+    "@mui/icons-material": "^7.3.7",
+    "@mui/lab": "7.0.1-beta.21",
+    "@mui/material": "^7.3.7",
     "@testing-library/jest-dom": "^6.9.0",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
     "axios": "^1.13.2",
-    "electron-updater": "^6.6.2",
+    "electron-updater": "^6.7.3",
     "foreman": "^3.0.1",
     "io-manager-usb-bootloader": "^0.0.9",
     "react": "^19.2.3",
@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "electron": "^39.2.7",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.4.0"
   },
   "author": "Marece Williams",
   "description": "Enter a description",
