@@ -5,8 +5,16 @@ const url = require('url')
 const { existsSync, mkdirSync, unlinkSync, readdirSync } = require('fs')
 const { autoUpdater } = require('electron-updater');
 
-const { setBase, downloadFirmware, getLines, getLine } = require('wbm-version-manager')
-setBase('http://versions.wbmtek.com/api')
+const { setBase, setAuth, setToken, downloadFirmware, getLines, getLine } = require('@wbm-tek/version-manager')
+const apiOrigin = (process.env.WBM_API_ORIGIN || process.env.WBM_SERVER_URL || 'https://api.wbmtek.com')
+    .replace(/\/$/, '')
+    .replace(/\/api$/, '')
+setBase(`${apiOrigin}/api`)
+if (process.env.WBM_API_TOKEN) {
+    setToken(process.env.WBM_API_TOKEN)
+} else if (process.env.WBM_USERNAME && process.env.WBM_PASSWORD) {
+    setAuth(process.env.WBM_USERNAME, process.env.WBM_PASSWORD)
+}
 
 let firstReactInit = true
 
