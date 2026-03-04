@@ -20,7 +20,7 @@
     "react-scripts": "5.0.1",
     "serialport": "^13.0.0",
     "usb": "^2.17.0",
-    "@wbm-tek/version-manager": "^0.0.71",
+    "@wbm-tek/version-manager": "^0.0.74",
     "web-vitals": "^5.1.0"
   },
   "scripts": {
@@ -57,7 +57,7 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
+    "eslint": "^10.0.2",
     "electron": "^40.6.1",
     "electron-builder": "^26.8.1"
   },
