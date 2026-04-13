@@ -5,19 +5,19 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.9",
-    "@mui/lab": "7.0.1-beta.23",
-    "@mui/material": "^7.3.9",
+    "@mui/icons-material": "^9.0.0",
+    "@mui/lab": "9.0.0-beta.2",
+    "@mui/material": "^9.0.0",
     "@testing-library/jest-dom": "^6.9.0",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@wbm-tek/version-manager": "^0.0.81",
-    "axios": "^1.14.0",
+    "axios": "^1.15.0",
     "electron-updater": "^6.8.3",
     "foreman": "^3.0.1",
     "io-manager-usb-bootloader": "^0.0.9",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "react-scripts": "5.0.1",
     "serialport": "^13.0.0",
     "usb": "^2.17.0",
@@ -57,9 +57,9 @@
     ]
   },
   "devDependencies": {
-    "electron": "^41.1.0",
+    "electron": "^41.2.0",
     "electron-builder": "^26.8.1",
-    "eslint": "^10.1.0"
+    "eslint": "^10.2.0"
   },
   "author": "Marece Williams",
   "description": "Enter a description",
