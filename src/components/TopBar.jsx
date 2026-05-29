@@ -18,12 +18,25 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import UploadIcon from "@mui/icons-material/Upload";
-import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import PlayCircleOutlineOutlinedIcon from "@mui/icons-material/PlayCircleOutlineOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 export default function TopBar() {
+  const compactButtonSx = {
+    minHeight: 30,
+    px: 1.25,
+    py: 0.25,
+    lineHeight: 1.2,
+    fontSize: "0.75rem",
+    fontWeight: 500,
+    textTransform: "none",
+    borderRadius: 1,
+    whiteSpace: "nowrap",
+    minWidth: "auto",
+  };
+
   const defaultProgress = {
     erasing: false,
     writeProgress: 0,
@@ -131,15 +144,23 @@ export default function TopBar() {
 
   return (
     <>
-      <Box p={1} sx={{ borderTop: "1px solid lightGrey" }}>
-        <Stack direction="row" spacing={1}>
-          <Box width="100%">
+      <Box
+        sx={{
+          px: 1,
+          py: 0.5,
+          borderTop: "1px solid lightGrey"
+        }}>
+        <Stack direction="row" spacing={0.75} alignItems="center">
+          <Box sx={{
+            width: "100%"
+          }}>
             <Button
               size="small"
               variant="contained"
               disabled={devices.length === 0}
               endIcon={<ExpandMoreIcon />}
               onClick={handleDevicesClick}
+              sx={compactButtonSx}
             >
               Devices
             </Button>
@@ -178,7 +199,7 @@ export default function TopBar() {
             color="warning"
             disabled={!selectedDeviceInfo}
             onClick={() => uploadFirmware()}
-            sx={{ whiteSpace: "nowrap", minWidth: "auto" }}
+            sx={compactButtonSx}
           >
             Upload Other FW
           </Button>
@@ -191,17 +212,21 @@ export default function TopBar() {
               selectedDeviceInfo.Firmware === selectedDeviceInfo.curfw
             }
             onClick={() => uploadCurrentFirmware()}
-            sx={{ whiteSpace: "nowrap", minWidth: "auto" }}
+            sx={compactButtonSx}
           >
             Upload Current FW
           </Button>
         </Stack>
       </Box>
       <Divider />
-      <Box p={1}>
+      <Box sx={{
+        px: 1,
+        py: 0.5
+      }}>
         <Typography
           variant="body2"
           sx={{
+            lineHeight: 1.2,
             color:
               selectedDeviceInfo &&
               selectedDeviceInfo.Firmware !== selectedDeviceInfo.curfw
@@ -234,7 +259,7 @@ export default function TopBar() {
             <TimelineItem>
               <TimelineSeparator>
                 <TimelineDot>
-                  <PlayCircleOutlineIcon
+                  <PlayCircleOutlineOutlinedIcon
                     style={iconStyle}
                     color={uploading ? "success" : ""}
                   />

@@ -150,8 +150,8 @@ const createWindow = () => {
         icon: join(__dirname, '/favicon.ico')
     })
 
-    const startUrl = process.env.ELECTRON_START_URL || url.format({
-        pathname: join(__dirname, '/../build/index.html'),
+    const startUrl = process.env.ELECTRON_RENDERER_URL || process.env.ELECTRON_START_URL || url.format({
+        pathname: join(__dirname, 'index.html'),
         protocol: 'file:',
         slashes: true
     });

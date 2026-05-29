@@ -23,16 +23,15 @@ function App() {
 
   return (
     <Box
-      width="100vw"
-      height="100vh"
-      maxHeight="100vh"
-      maxWidth="100vw"
       sx={{
+        width: "100vw",
+        height: "100vh",
+        maxHeight: "100vh",
+        maxWidth: "100vw",
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
+        overflow: "hidden"
+      }}>
       <CssBaseline />
       <TopBar />
       <Updates />

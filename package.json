@@ -8,27 +8,20 @@
     "@mui/icons-material": "^9.0.1",
     "@mui/lab": "9.0.0-beta.3",
     "@mui/material": "^9.0.1",
-    "@testing-library/jest-dom": "^6.9.0",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
     "@wbm-tek/version-manager": "^0.0.82",
     "axios": "^1.16.1",
     "electron-updater": "^6.8.3",
-    "foreman": "^3.0.1",
     "io-manager-usb-bootloader": "^0.0.9",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-scripts": "5.0.1",
     "serialport": "^13.0.0",
-    "usb": "^2.17.0",
-    "web-vitals": "^5.3.0"
+    "usb": "^2.17.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev": "nf start",
+    "start": "electron-vite dev",
+    "build": "electron-vite build",
+    "test": "echo \"No test runner configured\"",
+    "dev": "electron-vite dev",
     "package": "electron-builder build -c.extraMetadata.main=build/main.js --publish never",
     "deploy": "electron-builder build -c.extraMetadata.main=build/main.js --publish always",
     "backup": "git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin master",
@@ -38,32 +31,16 @@
     "try": "pnpm build && pnpm package",
     "postinstall": "electron-builder install-app-deps"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.0",
     "electron": "^42.3.0",
     "electron-builder": "^26.8.1",
-    "eslint": "^10.4.0"
+    "electron-vite": "^5.0.0",
+    "eslint": "^8.57.1",
+    "vite": "^7.1.10"
   },
   "author": "Marece Williams",
   "description": "Enter a description",
-  "homepage": "./",
   "main": "public/main.js",
   "build": {
     "productName": "io-manager firmware uploader",
