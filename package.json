@@ -9,11 +9,11 @@
     "@mui/lab": "9.0.0-beta.3",
     "@mui/material": "^9.0.1",
     "@wbm-tek/version-manager": "^0.0.82",
-    "axios": "^1.16.1",
+    "axios": "^1.17.0",
     "electron-updater": "^6.8.3",
     "io-manager-usb-bootloader": "^0.0.9",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "serialport": "^13.0.0",
     "usb": "^2.17.0"
   },
@@ -32,12 +32,12 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.1.0",
-    "electron": "^42.3.0",
+    "@vitejs/plugin-react": "^6.0.2",
+    "electron": "^42.3.3",
     "electron-builder": "^26.8.1",
     "electron-vite": "^5.0.0",
-    "eslint": "^8.57.1",
-    "vite": "^7.1.10"
+    "eslint": "^10.4.1",
+    "vite": "^8.0.16"
   },
   "author": "Marece Williams",
   "description": "Enter a description",
