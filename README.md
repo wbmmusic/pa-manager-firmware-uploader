@@ -32,3 +32,16 @@ Used during PAM system development for direct firmware upload to devices, bypass
 - electron-updater
 - io-manager-usb-bootloader
 - wbm-version-manager
+
+## Compatibility Notes
+
+- `io-manager-usb-bootloader@0.0.9` expects the legacy event-based USB stack.
+- Keep these versions aligned unless the bootloader package is upgraded: `usb@^2.16.0` and `serialport@^10.5.0`.
+
+Using newer majors (for example `usb@3` or `serialport@13`) can cause main process runtime errors such as `TypeError: usb.on is not a function`.
+
+## Troubleshooting
+
+- Error: `Electron uninstall`.
+- Cause: Electron package is present but the binary under `node_modules/electron/dist` is missing.
+- Fix: run `node node_modules/electron/install.js`.
