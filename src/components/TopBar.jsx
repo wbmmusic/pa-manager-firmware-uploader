@@ -150,7 +150,7 @@ export default function TopBar() {
           py: 0.5,
           borderTop: "1px solid lightGrey"
         }}>
-        <Stack direction="row" spacing={0.75} alignItems="center">
+        <Stack direction="row" spacing={0.75} sx={{ alignItems: "center" }}>
           <Box sx={{
             width: "100%"
           }}>

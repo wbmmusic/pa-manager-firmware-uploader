@@ -36,9 +36,11 @@ Used during PAM system development for direct firmware upload to devices, bypass
 ## Compatibility Notes
 
 - `io-manager-usb-bootloader@0.0.9` expects the legacy event-based USB stack.
-- Keep these versions aligned unless the bootloader package is upgraded: `usb@^2.16.0` and `serialport@^10.5.0`.
+- Keep these versions aligned unless the bootloader package is upgraded: `usb@^2.19.1` and `serialport@^10.5.0`.
 
-Using newer majors (for example `usb@3` or `serialport@13`) can cause main process runtime errors such as `TypeError: usb.on is not a function`.
+`usb@3` replaces the event-based API used by the bootloader and causes `TypeError: usb.on is not a function`. `serialport@13` is outside the bootloader's supported peer dependency range; keep SerialPort on 10.x until the bootloader declares support for a newer major.
+
+The `node-abi` override is required for rebuilding native dependencies with Electron 44.
 
 ## Troubleshooting
 
